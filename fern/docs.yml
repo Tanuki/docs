@@ -1,5 +1,6 @@
 instances:
-  - url: petstore-openapi.docs.buildwithfern.com
+  - url: paperplane.docs.buildwithfern.com
+    custom-domain: docs.tanuki.land
 
 navigation:
   - section: Get Started
@@ -9,24 +10,24 @@ navigation:
       - page: SDKs
         path: ./docs/pages/sdks.mdx
         slug: sdks
-  - api: API Reference
+  - api: api
 
 navbar-links: 
   - type: secondary
     text: Contact us
-    url: "mailto:support@buildwithfern.com"
+    url: "mailto:jack.hopkins@me.com"
   - type: primary
     text: Join the Discord
-    url: https://discord.com/invite/JkkXumPzcG
+    url: https://discord.com/invite/uUzX5DYctk
 
 colors:
   accentPrimary:
-    dark: "#adff8c"
+    dark: "#0e0d19"
     light: "#376d20"
 
 logo:
-  dark: ./docs/assets/logo_dark_mode.png
+  dark: ./docs/assets/logo_dark_mode.svg
   light: ./docs/assets/logo_light_mode.png
-  height: 30
+  height: 60
 
 favicon: ./docs/assets/favicon.ico
