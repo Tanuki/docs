@@ -13,6 +13,9 @@ navigation:
       - page: Quickstart
         path: ./docs/pages/quickstart.mdx
         slug: quickstart
+      - page: Creating and Aligning Tanuki functions
+        path: ./docs/pages/creating_functions.mdx
+        slug: creating_functions
   - api: api
 
 navbar-links: 
