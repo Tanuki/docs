@@ -16,6 +16,9 @@ navigation:
       - page: Creating and Aligning Tanuki functions
         path: ./docs/pages/creating_functions.mdx
         slug: creating_functions
+      - page: Supported Models
+        path: ./docs/pages/models.mdx
+        slug: supported_models
   - api: api
 
 navbar-links: 

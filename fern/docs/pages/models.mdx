@@ -1,0 +1,226 @@
+---
+title: Supported models
+description: Here you'll find information to get started quickly using Tanuki.
+---
+
+
+## Supported Model Providers
+
+We support OpenAI, TogetherAi and AWS Bedrock models for inference and OpenAI and Anyscale models for finetuning. The default teacher models are GPT-4 and GPT4-32K. To use non-default supported models, a 'teacher_models' parameter needs to be specified in the `@tanuki.patch` operators as seen below in the respective model provider sections. Similarly, to use non-OpenAI student models, see the Anyscale section regarding how to set anystcale models as potential student models. The full list of out-of-the-box models is in the table and the setup and how to use other models from the same provider can be seen in the sections below
+### All supported models
+Supported teacher models for language generation
+
+| Model Name                                    |  Model Handle              | Provider              | Context length|
+| ----------------------------------------------| -------------------------- |-----------------------|-------------- |
+|GPT-4-1106-preview                             | gpt-4-1106-preview         | OpenAI                |128000         |
+|GPT-4                                          | gpt-4                      | OpenAI                |8192           |
+|GPT-4-32k                                      | gpt-4-32k                  | OpenAI                |32768          |
+|GPT-4-Turbo (latest)                           | gpt-4-turbo                | OpenAI                |128000         |
+|GPT-4-Turbo-0125                               | gpt-4-turbo-0125           | OpenAI                |128000         |
+|Meta llama2-70b-chat-v1                        | llama_70b_chat_aws         | AWS Bedrock           |4096           |
+|Meta llama2-13b-chat-v1                        | llama_13b_chat_aws         | AWS Bedrock           |4096           |
+|Mistralai Mixtral-8x7B-Instruct-v0.1           | Mixtral-8x7B               | TogetherAI            |32768          |
+|NousResearch Nous-Hermes-2-Mixtral-8x7B-DPO    | Mixtral-8x7B-DPO           | TogetherAI            |32768          |
+|Zero-one-ai Yi-34B-Chat                        | Yi-34B-Chat                | TogetherAI            |4096           |
+|Meta llama-2-13b-chat                          | llama13b-togetherai        | TogetherAI            |4096           |
+|MistralAI Mistral-7B-Instruct-v0.2             | Mistral-7B-Instruct-v0.2   | TogetherAI            |32768          |
+|Openchat-3.5-1210                              | openchat-3.5               | TogetherAI            |8192           |
+|Teknium OpenHermes-2p5-Mistral-7B              | OpenHermes-2p5-Mistral     | TogetherAI            |4096           |
+
+
+Supported embedding models
+
+| Model Name                                    |  Model Handle              | Provider              | Context length|
+| ----------------------------------------------| -------------------------- |-----------------------|-------------- |
+|Text-embedding-ada-002                         | ada-002                    | OpenAI                |8191           |
+|Amazon Titan-embed-text-v1                     | aws_titan_embed_v1         | AWS Bedrock           |8000           |
+
+
+Supported student models for language generation
+
+| Model Name                                    |  Model Handle              | Provider              | Context length|
+| ----------------------------------------------| -------------------------- |-----------------------|-------------- |
+|GPT-3.5-turbo                                  | gpt-3.5-turbo-1106         | OpenAI                |16385          |
+|Meta Llama-2-7b-chat-hf                        | Llama-2-7b-chat-hf         | Anyscale              |8192           |
+|Meta Llama-2-13b-chat-hf                       | Llama-2-13b-chat-hf        | Anyscale              |32768          |
+|Meta Llama-2-70b-chat-hf                       | Llama-2-70b-chat-hf        | Anyscale              |128000         |
+|MistralAI Mistral-7B-Instruct-v0.1             | Mistral-7B-Instruct-v0.1   | Anyscale              |128000         |
+
+
+
+### OpenAI models
+Openai models are the default teacher models. Without specifying the teacher models to be used, GPT-4 and GPT4-32K will be used to carry out the function on the inputs. 
+
+To set up OpenAI models, the API key needs to be set as 
+<CodeBlocks>
+  <CodeBlock title="Openai setup">
+  ```bash
+  export OPENAI_API_KEY=sk-...
+  ```
+  </CodeBlock>
+</CodeBlocks>
+
+To use supported non-default OpenAI models, specify the "model_handle" of the supported model in the teacher_models parameter in the `@tanuki.patch` decorator
+
+<CodeBlocks>
+  <CodeBlock title="Python">
+  ```bash
+ @tanuki.patch(teacher_models = ["gpt-4-turbo-0125"])
+    def score_sentiment(input: str) -> Optional[Annotated[int, Field(gt=0, lt=10)]]:
+        """Scores the input between 0-10"""
+  ```
+  </CodeBlock>
+  <CodeBlock title="Typescript">
+  ```bash
+  TBD
+  ```
+  </CodeBlock>
+
+</CodeBlocks>
+
+
+To use non-supported  OpenAI models, create a OpenAIConfig object with the model parameters and specify it in in the teacher_models parameter in the `@tanuki.patch` decorator
+
+<CodeBlocks>
+  <CodeBlock title="Python">
+  ```bash
+    from tanuki.language_models.llm_configs.openai_config import OpenAIConfig
+    model = OpenAIConfig(model_name = "gpt-3.5-turbo-0125", context_length = 16385 )
+    @tanuki.patch(teacher_models = [model])
+    def score_sentiment(input: str) -> Optional[Annotated[int, Field(gt=0, lt=10)]]:
+        """Scores the input between 0-10"""
+  ```
+  </CodeBlock>
+  <CodeBlock title="Typescript">
+  ```bash
+  TBD
+  ```
+  </CodeBlock>
+
+</CodeBlocks>
+
+
+### TogetherAI models
+If you're using the open-source library, to use Together AI models, firstly the Together AI extra package needs to be installed by `pip install tanuki.py[together_ai]`. When the package has been installed, a configuration flag for the teacher model needs to be sent to the `@tanuki.patch` decorator like shown below in examples
+
+First to set up the API key 
+<CodeBlocks>
+  <CodeBlock title="Openai setup">
+  ```bash
+  export TOGETHER_API_KEY=...
+  ```
+  </CodeBlock>
+</CodeBlocks>
+
+To use supported TogetherAI models, specify the "model_handle" of the supported in the teacher_models parameter in the `@tanuki.patch` decorator
+<CodeBlocks>
+  <CodeBlock title="Python">
+  ```bash
+    @tanuki.patch(teacher_models = ["Mixtral-8x7B"])
+    def score_sentiment(input: str) -> Optional[Annotated[int, Field(gt=0, lt=10)]]:
+        """Scores the input between 0-10"""
+  ```
+  </CodeBlock>
+  <CodeBlock title="Typescript">
+  ```bash
+  TBD
+  ```
+  </CodeBlock>
+
+</CodeBlocks>
+
+To use non-supported TogetherAI models, create a TogetherAIConfig object with the model parameters and specify it in in the teacher_models parameter in the `@tanuki.patch` decorator
+<CodeBlocks>
+  <CodeBlock title="Python">
+  ```bash
+    from tanuki.language_models.llm_configs import TogetherAIConfig
+    model = TogetherAIConfig(model_name = "Open-Orca/Mistral-7B-OpenOrca", context_length = 8192)
+
+    @tanuki.patch(teacher_models = [model])
+    def score_sentiment(input: str) -> Optional[Annotated[int, Field(gt=0, lt=10)]]:
+        """Scores the input between 0-10"""
+  ```
+  </CodeBlock>
+  <CodeBlock title="Typescript">
+  ```bash
+  TBD
+  ```
+  </CodeBlock>
+
+</CodeBlocks>
+
+
+
+### AWS Bedrock models
+If you're using the open-source library, to use AWS Bedrock models, firstly the AWS Bedrock extra package needs to be installed by `pip install tanuki.py[aws_bedrock]`. When the package has been installed, a configuration flag for the teacher model needs to be sent to the `@tanuki.patch` decorator like shown below in examples. Make sure the workspace is correctly authenticated with AWS. We currently support LLama2 chat models and Titan embedding models with AWS Bedrock . 
+
+To use supported AWS Bedrock generation models, specify the "model_handle" of the supported in the teacher_models parameter in the `@tanuki.patch` decorator
+
+<CodeBlocks>
+  <CodeBlock title="Python">
+  ```bash
+    @tanuki.patch(teacher_models = ["llama_70b_chat_aws"])
+    def score_sentiment(input: str) -> Optional[Annotated[int, Field(gt=0, lt=10)]]:
+        """Scores the input between 0-10"""
+  ```
+  </CodeBlock>
+  <CodeBlock title="Typescript">
+  ```bash
+  TBD
+  ```
+  </CodeBlock>
+
+</CodeBlocks>
+
+
+Similarly to generation models, to use embedding models (See [RAG](placeholder_url) for more on embedding models) the model_handle needs to be specified in the teacher_models parameter in the `@tanuki.patch` decorator
+
+<CodeBlocks>
+  <CodeBlock title="Python">
+  ```bash
+    @tanuki.patch(teacher_models = ["aws_titan_embed_v1"])
+    def example_function(input: TypedInput) -> Embedding[np.ndarray]:
+        """(Optional) Include the description of how your function will be used."""
+  ```
+  </CodeBlock>
+  <CodeBlock title="Typescript">
+  ```bash
+  TBD
+  ```
+  </CodeBlock>
+
+</CodeBlocks>
+
+As different model provider in the AWS Bedrock stack have different API request templates, then its more difficult to use and implement any non-supported AWS Bedrock models, that your account may have access to. 
+If you want to implement any additional AWS models, feel free to open an issue or implement it yourself and open a PR. To add a newly configured model, have a look at the [llm_configs](https://github.com/Tanuki/tanuki.py/tree/master/src/tanuki/language_models/llm_configs) folder to see how model configurations are addressed and to add a new model configuration, add it to the [default_models](https://github.com/Tanuki/tanuki.py/tree/master/src/tanuki/language_models/llm_configs/__init__.py). If the request template is the same as the LLama Bedrock request, then you just need to add the provider as `llama_bedrock` to the config (import LLAMA_BEDROCK_PROVIDER from the [constants file](https://github.com/Tanuki/tanuki.py/tree/master/src/tanuki/constants.py)), otherwise you need to also add a new API template (have a look at how the [llama_bedrock_api](https://github.com/Tanuki/tanuki.py/tree/master/src/tanuki/language_models/llama_bedrock_api.py) is implemented) and update the [api_manager](https://github.com/Tanuki/tanuki.py/tree/master/src/tanuki/models/api_manager.py) and the [constants file](https://github.com/Tanuki/tanuki.py/tree/master/src/tanuki/constants.py) with the new provider and api template. First try out the prompting configurations with a couple of examples to ensure the outputs are performing well!.
+
+
+### Anyscale finetuning models
+
+Anyscale models use the OpenAI pacakge so there is no need to install any extra packages. To specify custom student models, a configuration flag for the student_model needs to be sent to the `@tanuki.patch` decorator like shown below. If no student_model is specified, OpenAIs gpt-3.5-turbo-1106 is used as the default student model.
+
+First to set up the API key 
+<CodeBlocks>
+  <CodeBlock title="Openai setup">
+  ```bash
+  export ANYSCALE_API_KEY=...
+  ```
+  </CodeBlock>
+</CodeBlocks>
+
+To use supported Anyscale models as student models for finetuning, specify the "model_handle" of the supported model in the student_model parameter in the `@tanuki.patch` decorator
+<CodeBlocks>
+  <CodeBlock title="Python">
+  ```bash
+    @tanuki.patch(student_model = "Llama-2-7b-chat-hf")
+    def score_sentiment(input: str) -> Optional[Annotated[int, Field(gt=0, lt=10)]]:
+        """Scores the input between 0-10"""
+  ```
+  </CodeBlock>
+  <CodeBlock title="Typescript">
+  ```bash
+  TBD
+  ```
+  </CodeBlock>
+
+</CodeBlocks>
