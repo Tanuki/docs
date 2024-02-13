@@ -19,6 +19,9 @@ navigation:
       - page: Supported Models
         path: ./docs/pages/models.mdx
         slug: supported_models
+      - page: Model Distillation
+        path: ./docs/pages/finetuning.mdx
+        slug: finetuning
   - api: api
 
 navbar-links: 

@@ -1,0 +1,16 @@
+---
+title: Finetuning
+description: Here you'll find information to get started quickly using Tanuki.
+---
+
+
+## Finetuning
+An advantage of using Tanuki in your workflow is the cost and latency benefits that will be provided as the number of datapoints increases. 
+
+Successful executions of your patched function suitable for finetuning will be persisted to a training dataset, which will be used to distil smaller models for each patched function. Model distillation and pseudo-labelling is a verified way how to cut down on model sizes and gain improvements in latency and memory footprints while incurring insignificant and minor cost to performance (https://arxiv.org/pdf/2305.02301.pdf, https://arxiv.org/pdf/2306.13649.pdf, https://arxiv.org/pdf/2311.00430.pdf, etc).
+
+Training smaller function-specific models and deploying them is handled by the Tanuki library, so the user will get the benefits without any additional MLOps or DataOps effort. Currently we support OpenAI GPT style models (GPT-3.5-turbo) and Anyscale models (Llama family and mistral 7B) as finetunable models. See [models](placeholder_url) for which student models are supported. 
+
+We ran Tanuki on some public datasets like Squad2, Spider and IMDB Movie Reviews. Using the default setting, our preliminary tests show that using less than 600 datapoints in the training data are enough to get gpt 3.5 turbo to perform essentialy equivalent (less than 1.5% of performance difference on held-out dev sets) to GPT-4 while achieving up to 12 times lower cost and over 6 times lower latency (cost and latency reduction are very dependent on task specific characteristics like input-output token sizes and align statement token sizes). These tests show the potential in model-distillation in this form for intelligently cutting costs and lowering latency without sacrificing performance.
+
+![Example distillation results](https://github.com/monkeypatch/tanuki.py/assets/113173969/2ac4c2fd-7ba6-4598-891d-6aa2c85827c9)
