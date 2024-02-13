@@ -3,12 +3,15 @@ title: Creating Functions
 description: Here you'll find information to get started quickly using Tanuki.
 ---
 
+A core concept of Tanuki is the support for typed parameters and outputs.
 
-## Creating Functions
+Supporting typed outputs of patched functions allows you to declare *rules about what kind of data the patched function is allowed to pass back* for use in the rest of your program.
 
-A core concept of Tanuki is the support for typed parameters and outputs. Supporting typed outputs of patched functions allows you to declare *rules about what kind of data the patched function is allowed to pass back* for use in the rest of your program. This will guard against the verbose or inconsistent outputs of the LLMs that are trained to be as “helpful as possible”.
+This will guard against the verbose or inconsistent outputs of the LLMs that are trained to be as “helpful as possible”.
 
-To set the allowed outputs, you have to specify the output typehint as is normally done in functions. You can use base classes such as ints, strings, lists or Literals or create custom types in Pydantic to express very complex rules about what the patched function can return. These act as guard-rails for the model preventing a patched function breaking the code or downstream workflows, and means you can avoid having to write custom validation logic in your application. You can see a couple of examples below or go to the [Examples](placeholder_url) section to see some more input and output examples
+To set the allowed outputs, you have to specify the output typehint as is normally done in functions.
+
+You can use base classes such as ints, strings, lists or Literals or create custom types in Pydantic to express very complex rules about what the patched function can return. These act as guard-rails for the model preventing a patched function breaking the code or downstream workflows, and means you can avoid having to write custom validation logic in your application. You can see a couple of examples below or go to the [Examples](placeholder_url) section to see some more input and output examples
 
 Example with int output
 

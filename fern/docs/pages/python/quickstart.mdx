@@ -1,0 +1,133 @@
+---
+title: Python Quickstart
+description: Here you'll find information to get started quickly using Tanuki.
+---
+
+
+Here you'll find information to get started with Tanuki.py as well as our API Reference.
+
+## Setup
+
+Install the Python package:
+
+<CodeBlock title="Python">
+  ```bash
+  pip3 install tanuki.py
+  ```
+</CodeBlock>
+
+Add the API authentication keys for your desired model provider (defaults to OpenAI).
+
+<CodeBlocks>
+  <CodeBlock title="OpenAI">
+  ```bash
+  export OPENAI_API_KEY=sk-...
+  ```
+  </CodeBlock>
+  <CodeBlock title="Amazon Bedrock">
+    ```bash
+    export BEDROCK_API_KEY=sk-...
+    ```
+    </CodeBlock>
+    <CodeBlock title="Together AI">
+    ```bash
+    export TOGETHER_API_KEY=sk-...
+    ```
+    </CodeBlock>
+    <CodeBlock title="Anyscale">
+    ```bash
+    export ANYSCALE_API_KEY=sk-...
+    ```
+    </CodeBlock>
+</CodeBlocks>
+
+## Create a function
+
+Create a python function stub decorated with `@tanuki.patch` including type hints and a docstring.
+
+<CodeBlock title="Patch">
+```python
+  import tanuki
+  from typing import Optional
+
+  @tanuki.patch
+  def classify_sentiment(msg: str) -> Optional[Literal['Good', 'Bad']]:
+      """Classifies a message from the user into Good, Bad or None."""
+    ```
+</CodeBlock>
+
+## Align the function (Optional)
+
+Create another function decorated with `@tanuki.align` containing `assert` statements declaring the expected behaviour of your patched function with different inputs.
+
+<CodeBlock title="Align">
+```python
+  @tanuki.align
+  def align_classify_sentiment():
+      assert classify_sentiment("I love you") == 'Good'
+      assert classify_sentiment("I hate you") == 'Bad'
+      assert not classify_sentiment("People from Phoenix are called Phoenicians")
+
+if __name__ == "__main__":
+    align_classify_sentiment()
+```
+</CodeBlock>
+
+## Configure the Tanuki runtime
+
+By default, Tanuki uses GPT-4 as the teacher model.
+
+Configure your Tanuki runtime either by:
+ - passing in the desired parameters to the `@tanuki.patch` operator.
+ - globally setting Tanuki environment variables.
+
+Instructions to configure other model providers as either teachers or students are in the [models](placeholder_url) section.
+
+Here is an example of how to configure the Tanuki runtime to use the Llama model from Bedrock as the teacher model.
+
+<CodeBlock title="Configure">
+```python
+from tanuki.language_models.llm_configs.llama_config import LlamaBedrockConfig
+
+@tanuki.patch(
+    teacher_models=[LlamaBedrockConfig(model_name = "llama778", context_length = 1)]
+)
+def classify_sentiment(input: str) -> Optional[Literal['Good', 'Bad']]:
+    """
+    Determine if the input is positive or negative sentiment
+    """
+
+```
+</CodeBlock>
+
+
+## Next steps
+<br />
+<Cards>
+<Card
+    title="Try this example on Colab"
+    icon="fa-brands fa-google"
+    href="https://colab.research.google.com/drive/1pSIuZlAVqravl0oKhMNVoPJ57bXOZQ14?usp=sharing"
+/>
+<Card
+    title="Learn how to create more complex functions and aligns"
+    icon="fa-book"
+    href="/api-reference/python"
+/>
+<Card
+    title="Learn how to use different teacher and student models"
+    icon="fa-graduation-cap"
+    href="/api-reference/python"
+/>
+<Card
+    title="Learn how Tanuki distills larger models down to smaller models"
+    icon="fa-flask"
+    href="/api-reference/python"
+/>
+<Card
+    title="See examples of what else you can do with Tanuki"
+    icon="fa-lightbulb"
+    href="/api-reference/python"
+/>
+</Cards>
+<br />

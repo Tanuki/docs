@@ -4,10 +4,17 @@ description: Here you'll find information to get started quickly using Tanuki.
 ---
 
 
-## Supported Model Providers
+## Supported Providers
 
-We support OpenAI, TogetherAi and AWS Bedrock models for inference and OpenAI and Anyscale models for finetuning. The default teacher models are GPT-4 and GPT4-32K. To use non-default supported models, a 'teacher_models' parameter needs to be specified in the `@tanuki.patch` operators as seen below in the respective model provider sections. Similarly, to use non-OpenAI student models, see the Anyscale section regarding how to set anystcale models as potential student models. The full list of out-of-the-box models is in the table and the setup and how to use other models from the same provider can be seen in the sections below
-### All supported models
+We support **OpenAI**, **TogetherAI** and **AWS Bedrock models** for inference and **OpenAI** and **Anyscale** models for finetuning.
+
+The default teacher models are **GPT-4** and **GPT4-32K**. To use other teacher models, include a 'teacher models' parameter in the Tanuki `patch` operator, as seen below in the respective model provider sections.
+
+Similarly, to use non-OpenAI student models, see the Anyscale section regarding how to set anyscale models as potential student models.
+
+The full list of out-of-the-box models is in the table and the setup and how to use other models from the same provider can be seen in the sections below
+
+## All supported models
 Supported teacher models for language generation
 
 | Model Name                                    |  Model Handle              | Provider              | Context length|
@@ -28,7 +35,7 @@ Supported teacher models for language generation
 |Teknium OpenHermes-2p5-Mistral-7B              | OpenHermes-2p5-Mistral     | TogetherAI            |4096           |
 
 
-Supported embedding models
+## Supported embedding models
 
 | Model Name                                    |  Model Handle              | Provider              | Context length|
 | ----------------------------------------------| -------------------------- |-----------------------|-------------- |
@@ -36,7 +43,7 @@ Supported embedding models
 |Amazon Titan-embed-text-v1                     | aws_titan_embed_v1         | AWS Bedrock           |8000           |
 
 
-Supported student models for language generation
+## Supported student models for language generation
 
 | Model Name                                    |  Model Handle              | Provider              | Context length|
 | ----------------------------------------------| -------------------------- |-----------------------|-------------- |
@@ -53,14 +60,14 @@ Openai models are the default teacher models. Without specifying the teacher mod
 
 To set up OpenAI models, the API key needs to be set as 
 <CodeBlocks>
-  <CodeBlock title="Openai setup">
+  <CodeBlock title="OpenAI">
   ```bash
   export OPENAI_API_KEY=sk-...
   ```
   </CodeBlock>
 </CodeBlocks>
 
-To use supported non-default OpenAI models, specify the "model_handle" of the supported model in the teacher_models parameter in the `@tanuki.patch` decorator
+To use supported non-default models from the **OpenAI** provider, specify the "model_handle" of the supported model in the teacher models parameter in the tanuki patch decorator.
 
 <CodeBlocks>
   <CodeBlock title="Python">
@@ -103,14 +110,12 @@ To use non-supported  OpenAI models, create a OpenAIConfig object with the model
 ### TogetherAI models
 If you're using the open-source library, to use Together AI models, firstly the Together AI extra package needs to be installed by `pip install tanuki.py[together_ai]`. When the package has been installed, a configuration flag for the teacher model needs to be sent to the `@tanuki.patch` decorator like shown below in examples
 
-First to set up the API key 
-<CodeBlocks>
-  <CodeBlock title="Openai setup">
+First to set up the API key
+<CodeBlock title="TogetherAI">
   ```bash
   export TOGETHER_API_KEY=...
   ```
-  </CodeBlock>
-</CodeBlocks>
+</CodeBlock>
 
 To use supported TogetherAI models, specify the "model_handle" of the supported in the teacher_models parameter in the `@tanuki.patch` decorator
 <CodeBlocks>

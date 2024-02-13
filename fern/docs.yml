@@ -13,15 +13,29 @@ navigation:
       - page: Quickstart
         path: ./docs/pages/quickstart.mdx
         slug: quickstart
-      - page: Creating and Aligning Tanuki functions
-        path: ./docs/pages/creating_functions.mdx
-        slug: creating_functions
+      - page: Creating your first functions
+        path: ./docs/pages/create_functions.mdx
+        slug: create_functions
+      - page: Aligning your functions
+        path: ./docs/pages/align_functions.mdx
+        slug: align_functions
       - page: Supported Models
         path: ./docs/pages/models.mdx
         slug: supported_models
       - page: Model Distillation
         path: ./docs/pages/finetuning.mdx
         slug: finetuning
+  - section: Python SDK
+    contents:
+      - page: Quickstart
+        path: ./docs/pages/python/quickstart.mdx
+        slug: quickstart-python
+  - section: Typescript SDK
+    contents:
+      - page: Quickstart
+        path: ./docs/pages/typescript/quickstart.mdx
+        slug: quickstart-typescript
+
   - api: api
 
 navbar-links: 
@@ -38,8 +52,8 @@ colors:
     light: "#376d20"
 
 logo:
-  dark: ./docs/assets/logo_dark_mode.svg
-  light: ./docs/assets/logo_light_mode.png
-  height: 60
+  dark: ./docs/assets/tanuki_logo_dark_mode.svg
+  light: ./docs/assets/tanuki_logo_light_mode.svg
+  height: 50
 
-favicon: ./docs/assets/favicon.ico
+favicon: ./docs/assets/favicon.svg
