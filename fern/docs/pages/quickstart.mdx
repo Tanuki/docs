@@ -39,94 +39,58 @@ To get started:
 
 ## Create the function
 3. Create a python function stub decorated with `@tanuki.patch` including type hints and a docstring.
+4. (Optional) Create another function decorated with `@tanuki.align` containing normal `assert` statements declaring the expected behaviour of your patched function with different inputs. When executing the function, the function annotated with `align` must also be called
+5. (Optional) Configure the model you want to use the function for. By default GPT-4 is used but if you want to use any other models supported in our stack, then configure them in the  `@tanuki.patch` operator. You can find out exactly how to configure OpenAI, Amazon Bedrock and Together AI models in the [models](placeholder_url) section.
+The patched function can now be called as normal in the rest of your code. 
 
 
-
-## Frequently Visited Resources
-
-<Cards>
-  <Card
-    title="API Reference"
-    icon="fa-solid fa-code"
-    href="/api-reference"
-  />
-  <Card
-    title="Discord Server"
-    icon="fa-brands fa-discord"
-    href="https://discord.com/invite/JkkXumPzcG"
-  />
-</Cards>
-
-<br />
-
-<Cards>
-  <Card
-    title="Blog"
-    icon="fa-solid fa-signal"
-    href="https://blog.buildwithfern.com"
-  />
-  <Card
-    title="SOC 2 Compliance"
-    icon="fa-solid fa-shield-halved"
-    href="https://security.buildwithfern.com"
-  />
-</Cards>
-
-## Getting started
-
-To get started, customize the links, content, and theme to match your brand! 
-
-## SDKs
-
-In addition to documentation, Fern can generate SDKs (client libraries) in popular programming languages. That way, you can offer users an experience such as:
+Here is what the whole script for a a simple classification function would look like:
 
 <CodeBlocks>
-  <CodeBlock title="Node">
-  ```bash
-  npm install your-organization
-  # or
-  yarn add your-organization
-  ```
-  </CodeBlock>
   <CodeBlock title="Python">
   ```bash
-  pip install your-organization
+  import tanuki
+  from typing import Optional
+  @tanuki.patch
+  def classify_sentiment(msg: str) -> Optional[Literal['Good', 'Bad']]:
+      """Classifies a message from the user into Good, Bad or None."""
+
+  @tanuki.align
+  def align_classify_sentiment():
+      assert classify_sentiment("I love you") == 'Good'
+      assert classify_sentiment("I hate you") == 'Bad'
+      assert not classify_sentiment("People from Phoenix are called Phoenicians")
+
+  align_classify_sentiment()
+  print(classify_sentiment("I like you")) # Good
+  print(classify_sentiment("Apples might be red")) # None
   ```
   </CodeBlock>
-  <CodeBlock title="Go">
+  <CodeBlock title="Typescript">
   ```bash
-  go get -u github.com/your-organization/go
+  class ClassifierSentiment {
+    static classifySentiment = patch< "Good" | "Bad", string>()
+        `Classifies a message from the user into Good, Bad or null.`;
+  }
+
+  Tanuki.align(async (it) => {
+     it("Specify how our functions should behave.", async (expect) => {
+          await expect(ClassifierSentiment.classifySentiment("I love you")).toEqual('Good');
+          await expect(ClassifierSentiment.classifySentiment("I hate you")).toEqual('Bad');
+          await expect(ClassifierSentiment.classifySentiment("People from Phoenix are called Phoenicians")).toBeNull();
+     })
+  })
+
+  console.log(await ClassifierSentiment.classifySentiment("I like you")) // Good
+  console.log(await ClassifierSentiment.classifySentiment("Apples might be red")) // Null
   ```
   </CodeBlock>
-  <CodeBlock title="Java">
-  ```bash
-  <dependency>
-    <groupId>com.your-organization</groupId>
-    <artifactId>your-organization</artifactId>
-    <version>2.0.0</version>
-  </dependency>
-  # or
-  implementation("com.your-organization.java:sdk:2.0.0")
-  ```
-  </CodeBlock>
-  <CodeBlock title="Ruby">
-  ```bash
-  gem install your-organization
-  ```
-  </CodeBlock>
-  <CodeBlock title="C#">
-  ```bash
-  nuget install your-organization.net
-  ```
-  </CodeBlock>
+
 </CodeBlocks>
 
-## Need help? 
+## Next steps 
 
-We have three channels to assist:
-
-1. Join the [Discord](https://discord.com/invite/JkkXumPzcG) where you can get help from Fern developers and community members.
-
-2. Open an issue on [GitHub](https://github.com/fern-api/docs-starter/issues/new) and we'll get back to you promptly.
-
-3. Email us at [support@buildwithfern.com](mailto:support@buildwithfern.com) and we'll do our best to reply within 48 hours.
+If you want to find out how to create more complex functions and aligns, check out the [Functions](placeholder_url) or the [Aligns](placeholder_url) section.
+If you want to find out how to use different teacher and student models, checkout out the [Models](placeholder_url) section.
+If you want to find out how Tanuki distills larger models down to smaller models, check out the [Distillation](placeholder_url) section.
+If you want to see a whole array of example functions with Tanuki, check out the [Examples](placeholder_url) section.
