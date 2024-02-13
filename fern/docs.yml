@@ -10,6 +10,9 @@ navigation:
       - page: SDKs
         path: ./docs/pages/sdks.mdx
         slug: sdks
+      - page: Quickstart
+        path: ./docs/pages/quickstart.mdx
+        slug: quickstart
   - api: api
 
 navbar-links: 
