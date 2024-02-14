@@ -74,14 +74,14 @@ An example function with a custom Pydantic class as output
   @dataclass
   class ActionItem:
       goal: str = Field(description="What task must be completed")
-      deadline: datetime = Field(description="The date the goal needs to be achieved")
+      urgency: Literal['High', 'Medium', 'Low'] = Field(description="How urgent is the task")
 
   @tanuki.patch
   def action_items(input: str) -> List[ActionItem]:
       """Generate a list of Action Items"""
 
-  input_str = "I need to complete the report by 5pm today"
-  action_items(input_str) # [ActionItem(goal="Complete the report", deadline=datetime(2021, 10, 10, 17, 0))]
+  input_str = "I need to book the hotel later today"
+  action_items(input_str) # [ActionItem(goal="Book the hotel", urgency="High")]
   ```
   </CodeBlock>
   <CodeBlock title="Typescript">
@@ -104,7 +104,7 @@ For instance, you can add integer constraints to the outputs for Pydantic field 
       """Scores the input between 0-10, if it cant be scored, return None"""
 
 
-  score_sentiment("I like you") # 7
+  score_sentiment("I like you") # 10
   score_sentiment("Apples might be red") # None
   ```
   </CodeBlock>
