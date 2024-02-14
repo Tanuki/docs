@@ -3,31 +3,26 @@ title: Quickstart
 description: Here you'll find information to get started quickly using Tanuki.
 ---
 
-<Callout intent="success">
-Integrate LLM into your workflow in under 5 minutes.
-</Callout>
-
 ## Quickstart
 
-Welcome to our documentation! Here you'll find information to get started as well as our API Reference.
+Here you'll learn how to get started with Tanuki.ts with a basic classification example.
 
 ## Setup
 
-To get started:
-1. Install the python or Typescript package
-<CodeBlocks>
-  <CodeBlock title="Typescript">
-  ```bash
-  npm install tanuki.ts
-  ```
-  </CodeBlock>
-  <CodeBlock title="Python">
-  ```bash
-  pip3 install tanuki.py
-  ```
-  </CodeBlock>
-</CodeBlocks>
-2. Add the API and authentication keys. To set the API key for the default OpenAI models 
+### Install the package
+<CodeBlock title="Install">
+    ```bash
+    npm install tanuki.ts
+    npm install ts-patch --save-dev
+    npx ts-patch install
+    ```
+</CodeBlock>
+
+### Authenticate with your model provider
+
+Add the API and authentication keys by setting environment variables.
+
+You can do this by adding the following to your `.bashrc` or `.zshrc` file, or by running the following commands in your terminal.
 
 <CodeBlocks>
   <CodeBlock title="Openai setup">
@@ -35,39 +30,125 @@ To get started:
   export OPENAI_API_KEY=sk-...
   ```
   </CodeBlock>
+    <CodeBlock title="Amazon Bedrock">
+        ```bash
+        export BEDROCK_API_KEY=sk-...
+        ```
+    </CodeBlock>
+    <CodeBlock title="Together AI">
+        ```bash
+        export TOGETHER_API_KEY=sk-...
+        ```
+    </CodeBlock>
+    <CodeBlock title="Anyscale">
+        ```bash
+        export ANYSCALE_API_KEY=sk-...
+        ```
+    </CodeBlock>
 </CodeBlocks>
 
-## Create the function
-3. Create a python function stub decorated with `@tanuki.patch` including type hints and a docstring.
-4. (Optional) Create another function decorated with `@tanuki.align` containing normal `assert` statements declaring the expected behaviour of your patched function with different inputs. When executing the function, the function annotated with `align` must also be called
-5. (Optional) Configure the model you want to use the function for. By default GPT-4 is used but if you want to use any other models supported in our stack, then configure them in the  `@tanuki.patch` operator. You can find out exactly how to configure OpenAI, Amazon Bedrock and Together AI models in the [models](placeholder_url) section.
-The patched function can now be called as normal in the rest of your code. 
+## Add Tanuki to your build system
 
+## Default
 
-Here is what the whole script for a a simple classification function would look like:
+Next, we need to add the Tanuki type transformer as a plugin to your `tsconfig.json` file.
 
-<CodeBlocks>
-  <CodeBlock title="Python">
-  ```bash
-  import tanuki
-  from typing import Optional
-  @tanuki.patch
-  def classify_sentiment(msg: str) -> Optional[Literal['Good', 'Bad']]:
-      """Classifies a message from the user into Good, Bad or None."""
+This will allow Tanuki to be aware of your patched functions and types at runtime, as these types are erased when transpiling into Javascript.
 
-  @tanuki.align
-  def align_classify_sentiment():
-      assert classify_sentiment("I love you") == 'Good'
-      assert classify_sentiment("I hate you") == 'Bad'
-      assert not classify_sentiment("People from Phoenix are called Phoenicians")
+```json
+{
+  "compilerOptions": {
+    "plugins": [
+      {
+        "transform": "tanuki.ts/tanukiTransformer"
+      }
+    ]
+  }
+}
+```
 
-  align_classify_sentiment()
-  print(classify_sentiment("I like you")) # Good
-  print(classify_sentiment("Apples might be red")) # None
-  ```
-  </CodeBlock>
-  <CodeBlock title="Typescript">
-  ```bash
+### Next.js Setup
+
+As Next.js has its own internal build system, you must explicitly add the transformer to your `package.json` file instead by adding the following scripts.
+
+```json
+{
+  "scripts": {
+    "predev": "tanuki-type-compiler",
+    "prebuild": "tanuki-type-compiler",
+    "prestart": "tanuki-type-compiler"
+  }
+}
+```
+
+## Create a function
+
+Create a Typescript class, and inside it create a static method decorated with `patch` containing type hints and a docstring.
+
+<CodeBlock title="Patch">
+    ```typescript
+    import { patch, Tanuki } from "../../lib/tanuki";
+
+    class SentimentClassifier {
+        static classifySentiment = patch< "Good" | "Bad", string>()
+            `Classify input objects`;
+    }
+    ```
+</CodeBlock>
+
+## Align the function (Optional)
+
+Create a block using `Tanuki.align` containing Jest-like `expect` statements to calibrate the expected behaviour of your patched function with different inputs.
+
+<Callout intent="info">
+See the [align](placeholder_url) section for more information on how to use the `align` operator.
+</Callout>
+
+<CodeBlock title="Align">
+    ```typescript
+    import { Tanuki } from "../../lib/tanuki";
+
+    Tanuki.align(async (it) => {
+        it("declares how classifySentiment should behave", async (expect) => {
+            await expect(ClassifierSentiment.classifySentiment("I love you")).toEqual('Good');
+            await expect(ClassifierSentiment.classifySentiment("I hate you")).toEqual('Bad');
+            await expect(ClassifierSentiment.classifySentiment("People from Phoenix are called Phoenicians")).toBeNull();
+        })
+    })
+    ```
+</CodeBlock>
+
+## Configure the Tanuki runtime
+
+By default, Tanuki uses GPT-4 as the teacher model.
+
+You can configure your Tanuki runtime either by:
+ - passing in the desired parameters to the `patch<>` operator.
+ - globally setting Tanuki environment variables.
+
+<Callout intent="info">
+    See the [configuration](placeholder_url) API reference for more configuration options.
+</Callout>
+
+Here is an example of how to configure the Tanuki runtime to use the Llama model from Bedrock as the teacher model.
+
+<CodeBlock title="Typescript">
+```typescript
+  class ClassifierSentiment {
+    static classifySentiment = patch< "Good" | "Bad", string>({
+        teacherModels: ["llama_70b_chat_aws"],
+        generationParams: {
+            "max_new_tokens": 10,
+        }
+    })`Classifies a message from the user into Good, Bad or null.`;
+  }
+```
+</CodeBlock>
+
+## Putting it all togther
+
+<CodeBlock title="Typescript">
+  ```typescript
   class ClassifierSentiment {
     static classifySentiment = patch< "Good" | "Bad", string>()
         `Classifies a message from the user into Good, Bad or null.`;
@@ -82,15 +163,33 @@ Here is what the whole script for a a simple classification function would look 
   })
 
   console.log(await ClassifierSentiment.classifySentiment("I like you")) // Good
-  console.log(await ClassifierSentiment.classifySentiment("Apples might be red")) // Null
+  console.log(await ClassifierSentiment.classifySentiment("Apples might be red")) // null
   ```
-  </CodeBlock>
+</CodeBlock>
 
-</CodeBlocks>
 
-## Next steps 
-
-If you want to find out how to create more complex functions and aligns, check out the [Functions](placeholder_url) or the [Aligns](placeholder_url) section.
-If you want to find out how to use different teacher and student models, checkout out the [Models](placeholder_url) section.
-If you want to find out how Tanuki distills larger models down to smaller models, check out the [Distillation](placeholder_url) section.
-If you want to see a whole array of example functions with Tanuki, check out the [Examples](placeholder_url) section.
+## Next steps
+<br />
+<Cards>
+    <Card
+        title="Learn how to create more complex functions and aligns"
+        icon="fa-book"
+        href="/api-reference/python"
+    />
+    <Card
+        title="Learn how to use different teacher and student models"
+        icon="fa-graduation-cap"
+        href="/api-reference/python"
+    />
+    <Card
+        title="Learn how Tanuki distills larger models down to smaller models"
+        icon="fa-flask"
+        href="/api-reference/python"
+    />
+    <Card
+        title="See examples of what else you can do with Tanuki"
+        icon="fa-lightbulb"
+        href="/api-reference/python"
+    />
+</Cards>
+<br />
