@@ -20,7 +20,7 @@ navigation:
         path: ./docs/pages/align_functions.mdx
         slug: align_functions
       - page: Embeddings & RAG
-        path: ./docs/pages/embeddings.mdx.mdx
+        path: ./docs/pages/embeddings.mdx
         slug: embeddings
       - page: Supported Models
         path: ./docs/pages/models.mdx
