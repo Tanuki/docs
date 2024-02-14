@@ -1,13 +1,38 @@
 ---
-title: Creating Functions
+title: Patching Functions
 description: Here you'll find information to get started quickly using Tanuki.
 ---
 
-A core concept of Tanuki is the support for typed parameters and outputs.
+A core concept of Tanuki is the idea of a `patch` function.
 
-Supporting typed outputs of patched functions allows you to declare *rules about what kind of data the patched function is allowed to pass back* for use in the rest of your program.
+A `patch` function is defined by a signature that represents a task or feature that will be executed by an LLM.
 
-This will guard against the verbose or inconsistent outputs of the LLMs that are trained to be as “helpful as possible”.
+A signature includes a function name, typed input parameters, expected output, and a docstring that describes the task.
+
+<CodeBlocks>
+    <CodeBlock title="Python">
+    ```python
+    @tanuki.patch
+    def classify_sentiment(input: str) -> Literal['Good', 'Bad']:
+        """
+        Classify the sentiment of the input text
+        """
+    ```
+    </CodeBlock>
+    <CodeBlock title="Typescript">
+    ```typescript
+    type Sentiment = "Good" | "Bad";
+    class SentimentClassifier {
+        static classifySentiment: Sentiment  = patch< Sentiment, string>()
+            `Classify input statmements`;
+    }
+    ```
+    </CodeBlock>
+</CodeBlocks>
+
+Specifying the output types of patched functions allows you to define what kind of data the patched function is allowed to return.
+
+This guards against the verbose or inconsistent outputs of the LLMs that are trained to be as “helpful as possible”.
 
 To set the allowed outputs, you have to specify the output typehint as is normally done in functions.
 

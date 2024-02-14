@@ -13,7 +13,7 @@ navigation:
       - page: Quickstart
         path: ./docs/pages/quickstart.mdx
         slug: quickstart
-      - page: Creating your first functions
+      - page: Patching functions
         path: ./docs/pages/create_functions.mdx
         slug: create_functions
       - page: Aligning your functions
@@ -25,6 +25,10 @@ navigation:
       - page: Model Distillation
         path: ./docs/pages/finetuning.mdx
         slug: finetuning
+      - page: Benchmarks
+        path: ./docs/pages/benchmarks.mdx
+        slug: benchmarks
+
   - section: Python SDK
     contents:
       - page: Quickstart
@@ -36,7 +40,10 @@ navigation:
         path: ./docs/pages/typescript/quickstart.mdx
         slug: quickstart-typescript
 
-  - api: api
+  #- api: api/python
+  #  slug: python-api
+  #- api: api/typescript
+  #  slug: typescript-api
 
 navbar-links: 
   - type: secondary
