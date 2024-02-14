@@ -3,9 +3,9 @@ title: Quickstart
 description: Here you'll find information to get started quickly using Tanuki.
 ---
 
-## Quickstart
-
-Here you'll learn how to get started with Tanuki.ts with a basic classification example.
+<Callout intent="success">
+    Build a classifier in under 5 minutes.
+</Callout>
 
 ## Setup
 
@@ -47,13 +47,13 @@ You can do this by adding the following to your `.bashrc` or `.zshrc` file, or b
     </CodeBlock>
 </CodeBlocks>
 
-## Add Tanuki to your build system
+### Add Tanuki to your build system
 
-## Default
+#### Default
 
 Next, we need to add the Tanuki type transformer as a plugin to your `tsconfig.json` file.
 
-This will allow Tanuki to be aware of your patched functions and types at runtime, as these types are erased when transpiling into Javascript.
+This will allow Tanuki to cache your patched functions and types at compile time, as these types are erased when transpiling into Javascript for runtime.
 
 ```json
 {
@@ -67,7 +67,7 @@ This will allow Tanuki to be aware of your patched functions and types at runtim
 }
 ```
 
-### Next.js Setup
+#### Next.js Setup
 
 As Next.js has its own internal build system, you must explicitly add the transformer to your `package.json` file instead by adding the following scripts.
 
@@ -89,9 +89,10 @@ Create a Typescript class, and inside it create a static method decorated with `
     ```typescript
     import { patch, Tanuki } from "../../lib/tanuki";
 
+    type Sentiment = "Good" | "Bad";
     class SentimentClassifier {
-        static classifySentiment = patch< "Good" | "Bad", string>()
-            `Classify input objects`;
+        static classifySentiment: Sentiment  = patch< Sentiment, string>()
+            `Classify input statmements`;
     }
     ```
 </CodeBlock>
@@ -126,16 +127,20 @@ You can configure your Tanuki runtime either by:
  - passing in the desired parameters to the `patch<>` operator.
  - globally setting Tanuki environment variables.
 
-<Callout intent="info">
-    See the [configuration](placeholder_url) API reference for more configuration options.
-</Callout>
-
 Here is an example of how to configure the Tanuki runtime to use the Llama model from Bedrock as the teacher model.
+
+<Callout intent="info">
+    See the [model providers](./pages/get-started/supported_models) section for available models.
+    See the [configuration](./pages/get-started/configuration) API reference for all configuration options.
+</Callout>
 
 <CodeBlock title="Typescript">
 ```typescript
+  type Sentiment = "Good" | "Bad";
+
   class ClassifierSentiment {
-    static classifySentiment = patch< "Good" | "Bad", string>({
+
+    static classifySentiment: Sentiment = patch<Sentiment, string>({
         teacherModels: ["llama_70b_chat_aws"],
         generationParams: {
             "max_new_tokens": 10,
@@ -149,8 +154,10 @@ Here is an example of how to configure the Tanuki runtime to use the Llama model
 
 <CodeBlock title="Typescript">
   ```typescript
+  type Sentiment = "Good" | "Bad";
+
   class ClassifierSentiment {
-    static classifySentiment = patch< "Good" | "Bad", string>()
+    static classifySentiment: Sentiment = patch< Sentiment, string>()
         `Classifies a message from the user into Good, Bad or null.`;
   }
 

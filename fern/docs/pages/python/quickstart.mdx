@@ -3,8 +3,9 @@ title: Python Quickstart
 description: Here you'll find information to get started quickly using Tanuki.
 ---
 
-
-Here you'll learn how to get started with Tanuki.py as well as our API Reference.
+<Callout intent="success">
+    Build a classifier in under 5 minutes.
+</Callout>
 
 ## Setup
 
@@ -46,12 +47,12 @@ Add the API authentication keys for your desired model provider (defaults to Ope
 Create a python function stub decorated with `@tanuki.patch` including type hints and a docstring.
 
 <CodeBlock title="Patch">
-```python
-  import tanuki
-  from typing import Optional
+    ```python
+    import tanuki
+    from typing import Optional
 
-  @tanuki.patch
-  def classify_sentiment(msg: str) -> Optional[Literal['Good', 'Bad']]:
+    @tanuki.patch
+    def classify_sentiment(msg: str) -> Optional[Literal['Good', 'Bad']]:
       """Classifies a message from the user into Good, Bad or None."""
     ```
 </CodeBlock>
@@ -59,6 +60,10 @@ Create a python function stub decorated with `@tanuki.patch` including type hint
 ## Align the function (Optional)
 
 Create another function decorated with `@tanuki.align` containing `assert` statements declaring the expected behaviour of your patched function with different inputs.
+
+<Callout intent="info">
+    See the [align](placeholder_url) section for more information on how to use the `align` operator.
+</Callout>
 
 <CodeBlock title="Align">
 ```python
@@ -78,12 +83,15 @@ if __name__ == "__main__":
 By default, Tanuki uses GPT-4 as the teacher model.
 
 Configure your Tanuki runtime either by:
- - passing in the desired parameters to the `@tanuki.patch` operator.
- - globally setting Tanuki environment variables.
-
-Instructions to configure other model providers as either teachers or students are in the [models](placeholder_url) section.
+ - passing in the desired parameters to the `@tanuki.patch` decorator.
+ - globally setting Tanuki environment variables for all functions.
 
 Here is an example of how to configure the Tanuki runtime to use the Llama model from Bedrock as the teacher model.
+
+<Callout intent="info">
+    See the [model providers](./pages/get-started/supported_models) section for all available models.
+    See the [configuration](./pages/get-started/configuration) API reference for all configuration options.
+</Callout>
 
 <CodeBlock title="Configure">
 ```python
