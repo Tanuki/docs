@@ -9,71 +9,15 @@ description: Here are
 
 Tanuki is a framework for developing powerful LLM applications without prompt engineering.
 
-## Features
-- Integrate in less than 5 minutes
-- Optimize cost and latency by up to 90% through automatic distillation
-- Align LLM behavior to your specifications declaratively
-- Strongly Typed and validated input and outputs
-- Supports leading LLM providers such as OpenAI, Bedrock, and more
-- Open-source SDKs in Python and Typescript
 
-## Principles
+We ran Tanuki on some public datasets like [Squad 2.0](https://rajpurkar.github.io/SQuAD-explorer/), [Spider](https://yale-lily.github.io/spider) and [IMDB Movie Reviews](https://huggingface.co/datasets/imdb). Using the default setting of GPT-4 as a teacher and GPT 3.5 Turbo as the finetuning target, our preliminary tests show that using less than 1000 datapoints in the training data are enough to get gpt 3.5 turbo to perform essentialy equivalent (less than 1.5% of performance difference on held-out dev sets) to GPT-4 while achieving up to 12 times lower cost and over 6 times lower latency (cost and latency reduction are very dependent on task specific characteristics like input-output token sizes and align statement token sizes).
+These tests show the potential in model-distillation in this form for intelligently cutting costs and lowering latency without sacrificing performance. The results can be seen in the table below, where in the parenthesis we show the accuracy, cost and latency of the finetuned model compared to the teacher model respectively.
 
-Tanuki is designed to help you build LLM applications using software engineering best practices.
-
-It is built on the following principles:
-- **Ergonomic**: Use idiomatic patterns and best practices in your language of choice for cleaner and more maintainable code.
-- **Logic as Code**: Define your LLM features as typed functions, rather than prompt engineering.
-- **Test-Driven**: Declare the behavior of your LLM functions with unit-tests.
-- **Convention over Configuration**: Tanuki is designed to work out of the box with sensible defaults, but is also highly configurable.
-- **Open Source**: Tanuki is open-source and community-driven.
-
-## When to use Tanuki
-
-- You are building features that require reasoning, understanding, or decision-making over complex or unstructured data.
-- You need lower latency without sacrificing accuracy or cost.
-- You want to align LLM behavior to your specifications declaratively.
-- You want to use outputs from an LLM in the rest of your application.
-
-
-Welcome to our documentation! Here you'll find information to get started as well as our API Reference.
-
-## Frequently Visited Resources
-
-<Cards>
-  <Card
-    title="API Reference"
-    icon="fa-solid fa-code"
-    href="/api-reference"
-  />
-  <Card
-    title="Discord Server"
-    icon="fa-brands fa-discord"
-    href="https://discord.com/invite/JkkXumPzcG"
-  />
-</Cards>
-
-<br />
-
-<Cards>
-  <Card
-    title="Blog"
-    icon="fa-solid fa-signal"
-    href="https://blog.buildwithfern.com"
-  />
-  <Card
-    title="SOC 2 Compliance"
-    icon="fa-solid fa-shield-halved"
-    href="https://security.buildwithfern.com"
-  />
-</Cards>
-
-## Need help? 
-
-We have three channels to assist:
-
-1. Join the [Discord](https://discord.com/invite/JkkXumPzcG) where you can get help from Tanuki developers and community members.
-
-2. Open a Github issue on [Tanuki.ts](https://github.com/Tanuki/tanuki.ts/issues/new) or [Tanuki.py](https://github.com/Tanuki/tanuki.py/issues/new) and we'll get back to you promptly.
-
-3. Email us at [support@tanuki.land](mailto:support@tanuki.land) and we'll do our best to reply within 48 hours.
+| Metric                                                   |  Squad 2.0   | Spider      | IMDB Movie Reviews|
+| ---------------------------------------------------------| ------------ |-------------|------------------ |
+|GPT-4 Accuracy                                            | 89% (100%)   | 74%  (100%) |97% (100%)         |
+|Finetuned GPT 3.5 Turbo Accuracy                          | 88% (99%)    | 72%  (97%)  |97% (100%)         |
+|GPT-4 Average cost ($ per request)                        | 0.07 (100%)  | 0.07 (100%) |0.04 (100%)        |
+|Finetuned GPT 3.5 Turbo Average cost ($ per request)      | 0.004 (6%)   | 0.02 (29%)  |0.005 (13%)        |
+|GPT-4 Average latency (sec per request)                   | 1.37  (100%) | 3.81 (100%) |1.06 (100%)        |
+|Finetuned GPT 3.5 Turbo Average latency (sec per request) | 0.81  (59%)  | 0.62 (16%)  |0.61 (58%)         |
