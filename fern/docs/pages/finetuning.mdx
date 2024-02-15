@@ -10,14 +10,4 @@ Successful executions of your patched function suitable for finetuning will be p
 
 Training smaller function-specific models and deploying them is handled by the Tanuki library, so the user will get the benefits without any additional MLOps or DataOps effort. Currently we support OpenAI GPT style models (GPT-3.5-turbo) and Anyscale models (Llama family and mistral 7B) as finetunable models. See [models](placeholder_url) for which student models are supported. 
 
-We ran Tanuki on some public datasets like [Squad 2.0](https://rajpurkar.github.io/SQuAD-explorer/), [Spider](https://yale-lily.github.io/spider) and [IMDB Movie Reviews](https://huggingface.co/datasets/imdb). Using the default setting of GPT-4 as a teacher and GPT 3.5 Turbo as the finetuning target, our preliminary tests show that using less than 1000 datapoints in the training data are enough to get gpt 3.5 turbo to perform essentialy equivalent (less than 1.5% of performance difference on held-out dev sets) to GPT-4 while achieving up to 12 times lower cost and over 6 times lower latency (cost and latency reduction are very dependent on task specific characteristics like input-output token sizes and align statement token sizes).
-These tests show the potential in model-distillation in this form for intelligently cutting costs and lowering latency without sacrificing performance. The results can be seen in the table below, where in the parenthesis we show the accuracy, cost and latency of the finetuned model compared to the teacher model respectively.
-
-| Metric                                                   |  Squad 2.0   | Spider      | IMDB Movie Reviews|
-| ---------------------------------------------------------| ------------ |-------------|------------------ |
-|GPT-4 Accuracy                                            | 89% (100%)   | 74%  (100%) |97% (100%)         |
-|Finetuned GPT 3.5 Turbo Accuracy                          | 88% (99%)    | 72%  (97%)  |97% (100%)         |
-|GPT-4 Average cost ($ per request)                        | 0.07 (100%)  | 0.07 (100%) |0.04 (100%)        |
-|Finetuned GPT 3.5 Turbo Average cost ($ per request)      | 0.004 (6%)   | 0.02 (29%)  |0.005 (13%)        |
-|GPT-4 Average latency (sec per request)                   | 1.37  (100%) | 3.81 (100%) |1.06 (100%)        |
-|Finetuned GPT 3.5 Turbo Average latency (sec per request) | 0.81  (59%)  | 0.62 (16%)  |0.61 (58%)         |
+![Model distillation workflow](https://github.com/Tanuki/docs/blob/main/fern/docs/assets/distillation_light.png)
